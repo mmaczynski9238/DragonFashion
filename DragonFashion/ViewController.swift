@@ -8,18 +8,37 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
+    @IBOutlet weak var myTableView: UITableView!
+    var dragonArray:[Dragon] = [Dragon]()
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        let dragonZero = Dragon(Name: "Smaug", Description: "Crown")
+        dragonArray.append(dragonZero)
+        let dragonOne = Dragon(Name: "Alfred", Description: "Tail")
+        dragonArray.append(dragonOne)
+
+    
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return dragonArray.count
+    
     }
-
-
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let currentDragon = dragonArray[indexPath.row]
+        let currentCell = tableView.dequeueReusableCellWithIdentifier("MyCell")!
+        currentCell.textLabel!.text = currentDragon.name
+        return currentCell
+        
+    }
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        let nvc = segue.destinationViewController as! DetailsViewController
+        let currentDragon = dragonArray[(myTableView.indexPathForSelectedRow?.row)!]
+        nvc.currentDragon = currentDragon
+    }
+    
 }
 
